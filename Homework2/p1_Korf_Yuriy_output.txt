@@ -1,0 +1,95 @@
+1. #!/usr/bin/env python3
+2. # -*- coding: utf-8 -*-
+3. """
+4. Created on Tue Sep 22 18:38:01 2026
+5. 
+6. @author: Yuriy Korf
+7. p1_Korf_Yuriy.py
+8. COP4045 - Homework 2
+9. 
+10. """
+11. 
+12. def line_number(input_file: str, output_file: str) -> None:
+13.     """
+14.     Description:
+15.         Reads a text file and writes its contents to another text file with each line numbered.
+16. 
+17.     Numbering is in the format:
+18.         1.
+19.         2.
+20.         3.
+21.         ...
+22. 
+23.     Parameters:
+24.         input_file (str): The name of the text file to be read from.
+25.         output_file (str): The name of the text file to write to.
+26. 
+27.     Error handling:
+28.         An OSError is re-raised and an error message is printed to the terminal if an error
+29.         occurs during file read or write operations. 
+30.         
+31.     """
+32.     try:
+33.         with open(input_file, "r") as infile, open(output_file, "w") as outfile:
+34.             for number, line in enumerate(infile, start=1):
+35.                 outfile.write(f"{number}. {line}")
+36.     except OSError as e:
+37.         print("An error occurred while processing the files.")
+38.         print(f"Details: {e}")
+39.         raise
+40.         
+41. def parse_functions(filename: str) -> tuple:
+42.     """
+43.     Description:
+44.        Reads and parses a Python file line by line and then returns
+45.        each function's details found in the file.
+46. 
+47.     Return format:
+48.        In alphabetical order, a tuple of tuples is returned with the line number, the function name, 
+49.        the formal argument list as a string, and the function code as a string.
+50. 
+51.     Parameters:
+52.        filename (str): The name of the Python file to be parsed.
+53. 
+54.     Error handling:
+55.        An OSError is re-raised and an error message is printed to the terminal
+56.        if an error occurs during file read operations.
+57.    """
+58.    
+59.     try:
+60.         with open(filename, "r") as infile:
+61.             lines = infile.readlines()
+62.             
+63.         functions = []
+64.         
+65.         for number, line in enumerate(lines, start=1):
+66.             if line.startswith("def "):
+67.                 function_name = line.split("(")[0].replace("def ", "").strip()
+68.                 arguments = line.split("(", 1)[1].split(")", 1)[0]
+69.                 function = (number, function_name, arguments)
+70.                 functions.append(function)
+71.         return tuple(functions)
+72.             
+73.                 
+74.                 
+75.     except OSError as e:
+76.         print("An error occurred while reading the file.")
+77.         print(f"Details: {e}")
+78.         raise
+79. 
+80. 
+81. 
+82. def main() -> None:
+83.     """
+84.     Tests the line_number and parse_functions functions on this file.
+85.     """
+86. 
+87.     in_file = "p1_Korf_Yuriy.py"
+88.     out_file = "p1_Korf_Yuriy_output.txt"
+89. 
+90.     line_number(in_file, out_file)
+91.     parsing_result = parse_functions(in_file)
+92.     print(parsing_result)
+93. 
+94. if __name__ == "__main__":
+95.     main()
